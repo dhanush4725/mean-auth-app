@@ -1,0 +1,12 @@
+<div class="dashboard-container">
+  <nav class="navbar">
+    <h2>Dashboard</h2>
+    <button (click)="logout()">Logout</button>
+  </nav>
+
+  <div class="content" *ngIf="user">
+    <h3>Welcome, {{ user.username }}!</h3>
+    <p>Email: {{ user.email }}</p>
+    <p>You are successfully authenticated.</p>
+  </div>
+</div>
