@@ -1,6 +1,6 @@
 <div class="auth-container">
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
-    <h2>Register</h2>
+    <h2>Create Account</h2>
 
     <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
     <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
@@ -22,29 +22,52 @@
     </div>
 
     <div class="form-group">
-  <label for="password">Password</label>
-  <div class="password-wrapper">
-    <input
-      id="password"
-      [type]="showPassword ? 'text' : 'password'"
-      formControlName="password"
-      placeholder="Enter password"
-    />
-    <button
-      type="button"
-      class="toggle-password"
-      (click)="togglePasswordVisibility()"
-      [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
-    >
-      {{ showPassword ? '🙈' : '👁️' }}
-    </button>
-  </div>
-  <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid" class="field-error">
-    Password must be at least 6 characters
-  </div>
-</div>
+      <label for="password">Password</label>
+      <div class="password-wrapper">
+        <input
+          id="password"
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="Choose a password"
+        />
+        <button
+          type="button"
+          class="toggle-password"
+          (click)="togglePasswordVisibility()"
+          [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+        >
+          {{ showPassword ? '🙈' : '👁️' }}
+        </button>
+      </div>
+      <div *ngIf="registerForm.get('password')?.value" class="strength-bar-track">
+        <div class="strength-bar-fill"
+             [style.width.%]="passwordStrength.percent"
+             [style.background]="passwordStrength.color"></div>
+      </div>
+      <div *ngIf="registerForm.get('password')?.value" class="strength-label"
+           [style.color]="passwordStrength.color">
+        {{ passwordStrength.label }}
+      </div>
+      <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid" class="field-error">
+        Password must be at least 6 characters
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="confirmPassword">Confirm Password</label>
+      <input
+        id="confirmPassword"
+        type="password"
+        formControlName="confirmPassword"
+        placeholder="Re-enter password"
+      />
+      <div *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.errors?.['mismatch']" class="field-error">
+        Passwords do not match
+      </div>
+    </div>
 
     <button type="submit" [disabled]="registerForm.invalid || loading">
+      <span *ngIf="loading" class="spinner"></span>
       {{ loading ? 'Registering...' : 'Register' }}
     </button>
 
